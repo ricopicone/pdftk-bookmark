@@ -1,0 +1,28 @@
+#! /usr/bin/python
+import sys
+import os
+
+args = sys.argv
+input_file = args[1]
+bookmark_page = args[2]
+bookmark_title = args[3]
+info_file = '.temp_dump.txt'
+
+print 'intput_file: '+input_file
+
+os.system('pdftk '+input_file+' dump_data output '+info_file)
+with open(info_file, "a") as myfile:
+    myfile.write(
+    	'\n'+
+    	'BookmarkBegin \n'+
+    	'BookmarkTitle:'+
+    	bookmark_title+
+    	' \n'+
+			'BookmarkLevel: 1 \n'+
+			'BookmarkPageNumber: '+
+			bookmark_page+
+			' '
+		)
+os.system('pdftk '+input_file+' update_info '+info_file+' output '+input_file+'_temp')
+os.system('mv '+input_file+'_temp '+input_file)
+os.system('rm '+info_file)
